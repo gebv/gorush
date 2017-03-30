@@ -114,6 +114,7 @@ func main() {
 	flag.StringVar(&opts.Android.APIKey, "apikey", "", "Android api key configuration for gorush")
 	flag.StringVar(&opts.Core.Port, "p", "", "port number for gorush")
 	flag.StringVar(&opts.Core.Port, "port", "", "port number for gorush")
+	flag.StringVar(&opts.Core.PushErrNotif, "push_err_notif", "", "execute when the error push (information about the token and the error code is attached)")
 	flag.StringVar(&token, "t", "", "token string")
 	flag.StringVar(&token, "token", "", "token string")
 	flag.StringVar(&message, "m", "", "notification message")
@@ -264,5 +265,6 @@ func main() {
 	gorush.InitAppStatus()
 	gorush.InitAPNSClient()
 	gorush.InitWorkers(gorush.PushConf.Core.WorkerNum, gorush.PushConf.Core.QueueNum)
+	gorush.InitReporter()
 	gorush.RunHTTPServer()
 }

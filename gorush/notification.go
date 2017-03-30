@@ -368,6 +368,7 @@ Retry:
 		if err != nil {
 			// apns server error
 			LogPush(FailedPush, token, req, err)
+			go ReportPushError(PlatFormIos, token, err.Error())
 			StatStorage.AddIosError(1)
 			newTokens = append(newTokens, token)
 			isError = true
@@ -378,6 +379,7 @@ Retry:
 			// error message:
 			// ref: https://github.com/sideshow/apns2/blob/master/response.go#L14-L65
 			LogPush(FailedPush, token, req, errors.New(res.Reason))
+			go ReportPushError(PlatFormIos, token, res.Reason)
 			StatStorage.AddIosError(1)
 			newTokens = append(newTokens, token)
 			isError = true
@@ -494,6 +496,7 @@ Retry:
 			isError = true
 			newTokens = append(newTokens, req.Tokens[k])
 			LogPush(FailedPush, req.Tokens[k], req, errors.New(result.Error))
+			go ReportPushError(PlatFormAndroid, req.Tokens[k], result.Error)
 			continue
 		}
 
